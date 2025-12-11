@@ -4,7 +4,7 @@
 N кораблей имеют N типов вооружения
 Командующие могут назначаться или в корабль или ко всему флоту
 
-Составить схему таблиц в DDL, использовать внешние ключи, констрейнты, индексы, триггеры*, вьюхи
+[Составить схему таблиц в DDL](https://github.com/SergeyIvanov11/SpaceFleetDB/blob/review/src/main/resources/db/migration/V1__init_fleet_schema.sql), использовать внешние ключи, констрейнты, индексы, триггеры*, вьюхи
 Использовать различные типы данных например строки, числа, булеан, енам, даты и тд
 
-нагенерировать данные каким то образом, можно через сервис https://www.mockaroo.com/
+[нагенерировать данные](https://github.com/SergeyIvanov11/SpaceFleetDB/blob/review/src/main/resources/db/migration/V2__insert_mock_data.sql) каким то образом, можно через сервис https://www.mockaroo.com/
