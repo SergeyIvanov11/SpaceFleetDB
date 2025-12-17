@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="001-schema" author="sergey">
+        <sqlFile
+                path="migrations/001-schema.sql"
+                relativeToChangelogFile="true"
+                splitStatements="false"
+                stripComments="false"/>
+    </changeSet>
+
+    <changeSet id="002-insert" author="sergey">
+        <sqlFile path="migrations/002-insert.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="false"/>
+    </changeSet>
+
+</databaseChangeLog>

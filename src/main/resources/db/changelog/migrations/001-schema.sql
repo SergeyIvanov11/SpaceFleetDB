@@ -1,43 +1,43 @@
 CREATE TYPE rank_enum AS ENUM (
-    'cadet',          -- курсант
-    'ensign',         -- мичман
-    'lieutenant',     -- лейтенант
-    'lieutenant_commander',
-    'commander',
-    'captain',
-    'commodore',
-    'admiral'
+    'CADET',          -- курсант
+    'ENSIGN',         -- мичман
+    'LIEUTENANT',     -- лейтенант
+    'LIEUTENANT_COMMANDER',
+    'COMMANDER',
+    'CAPTAIN',
+    'COMMODORE',
+    'ADMIRAL'
 );
 
 CREATE TYPE specialization_enum AS ENUM (
-    'pilot',
-    'engineer',
-    'medic',
-    'navigator',
-    'weapons_officer',
-    'communications',
-    'science_officer',
-    'security',
-    'technician'
+    'PILOT',
+    'ENGINEER',
+    'MEDIC',
+    'NAVIGATOR',
+    'WEAPONS_OFFICER',
+    'COMMUNICATIONS',
+    'SCIENCE_OFFICER',
+    'SECURITY',
+    'TECHNICIAN'
 );
 
 CREATE TYPE ship_category AS ENUM (
-    'scout',       -- разведчик
-    'frigate',     -- фрегат
-    'destroyer',   -- эсминец
-    'cruiser',     -- крейсер
-    'carrier',     -- авианосец
-    'dreadnought', -- линкор
-    'medical',     -- медицинский корабль
-    'transport',   -- грузовой
-    'research'     -- научный
+    'SCOUT',       -- разведчик
+    'FRIGATE',     -- фрегат
+    'DESTROYER',   -- эсминец
+    'CRUISER',     -- крейсер
+    'CARRIER',     -- авианосец
+    'DREADNOUGHT', -- линкор
+    'MEDICAL',     -- медицинский корабль
+    'TRANSPORT',   -- грузовой
+    'RESEARCH'     -- научный
 );
 
-CREATE TYPE weapon_status AS ENUM ('ready', 'reloading', 'offline', 'damaged');
-CREATE TYPE weapon_class AS ENUM ('laser', 'missile', 'plasma', 'railgun', 'ion');
+CREATE TYPE weapon_status AS ENUM ('READY', 'RELOADING', 'OFFLINE', 'DAMAGED');
+CREATE TYPE weapon_class AS ENUM ('LASER', 'MISSILE', 'PLASMA', 'RAILGUN', 'ION');
 
 -- Tables
-CREATE TABLE fleet
+CREATE TABLE if not exists fleet
 (
     id             SERIAL PRIMARY KEY,
     name           VARCHAR(50) NOT NULL UNIQUE,
@@ -46,7 +46,7 @@ CREATE TABLE fleet
     active         BOOLEAN     NOT NULL DEFAULT TRUE
 );
 
-CREATE TABLE ship
+CREATE TABLE if not exists ship
 (
     id              SERIAL PRIMARY KEY,
     name            VARCHAR(50)   NOT NULL UNIQUE,
@@ -60,7 +60,7 @@ CREATE TABLE ship
 CREATE INDEX idx_ship_fleet ON ship (fleet_id);
 CREATE INDEX idx_ship_type ON ship (ship_type);
 
-CREATE TABLE crew_member
+CREATE TABLE if not exists crew_member
 (
     id             SERIAL PRIMARY KEY,
     ship_id        INT                 NOT NULL REFERENCES ship (id) ON DELETE CASCADE,
@@ -73,7 +73,7 @@ CREATE TABLE crew_member
 
 CREATE INDEX idx_crew_ship ON crew_member (ship_id);
 
-CREATE TABLE weapon_type
+CREATE TABLE if not exists weapon_type
 (
     id         SERIAL PRIMARY KEY,
     title      VARCHAR(100) NOT NULL UNIQUE,
@@ -81,19 +81,19 @@ CREATE TABLE weapon_type
     max_damage INT CHECK (max_damage > 0)
 );
 
-CREATE TABLE ship_weapon
+CREATE TABLE if not exists ship_weapon
 (
     id             SERIAL PRIMARY KEY,
     ship_id        INT NOT NULL REFERENCES ship (id) ON DELETE CASCADE,
     weapon_type_id INT NOT NULL REFERENCES weapon_type (id),
-    status         weapon_status DEFAULT 'ready',
+    status         weapon_status DEFAULT 'READY',
     ammo_count     INT           DEFAULT 0 CHECK (ammo_count >= 0)
 );
 
 CREATE UNIQUE INDEX idx_ship_weapon_unique
     ON ship_weapon (ship_id, weapon_type_id);
 
-CREATE TABLE commander
+CREATE TABLE if not exists commander
 (
     id                SERIAL PRIMARY KEY,
     full_name         VARCHAR(100) NOT NULL,
@@ -142,31 +142,6 @@ CREATE TRIGGER trg_check_crew_capacity
     BEFORE INSERT
     ON crew_member
     FOR EACH ROW EXECUTE FUNCTION check_crew_capacity();
-
---автоматический контроль возраста экипажа
-CREATE FUNCTION check_crew_member_age()
-RETURNS trigger AS $$
-DECLARE
-years int;
-BEGIN
-SELECT DATE_PART('year', AGE(NEW.birth_date))
-INTO years;
-
-IF
-years < 18 THEN
-        RAISE EXCEPTION 'Crew member must be at least 18 years old. Given age: %', years;
-END IF;
-
-RETURN NEW;
-END;
-$$
-LANGUAGE plpgsql;
-
-CREATE TRIGGER trg_check_crew_member_age
-    BEFORE INSERT
-    ON crew_member
-    FOR EACH ROW
-    EXECUTE FUNCTION check_crew_member_age();
 
 -- Views
 --боевой потенциал корабля
