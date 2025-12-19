@@ -36,7 +36,7 @@ public class ShipWeapon {
     @JoinColumn(name = "ship_id", nullable = false)
     Ship ship;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "weapon_type_id", nullable = false)
     WeaponType weaponType;
 

@@ -1,0 +1,6 @@
+com\example\spacefleetdb\PostgresContainerTest.class
+com\example\spacefleetdb\AbstractIntegrationTest.class
+com\example\spacefleetdb\FleetJooqRepositoryTest.class
+com\example\spacefleetdb\SpaceFleetServiceTest.class
+com\example\spacefleetdb\CrewJpaRepositoryTest.class
+com\example\spacefleetdb\ShipJdbcRepositoryTest.class

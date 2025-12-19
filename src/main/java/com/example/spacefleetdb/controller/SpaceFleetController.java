@@ -3,6 +3,7 @@ package com.example.spacefleetdb.controller;
 import com.example.spacefleetdb.dto.CrewMemberDto;
 import com.example.spacefleetdb.dto.FleetStatsDto;
 import com.example.spacefleetdb.dto.ShipDamageDto;
+import com.example.spacefleetdb.entity.ShipWeapon;
 import com.example.spacefleetdb.service.SpaceFleetService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,21 @@ public class SpaceFleetController {
     @GetMapping("/stats")
     public ResponseEntity<List<FleetStatsDto>> getFleetStats() {
         return ResponseEntity.ok(service.getFleetStatistics());
+    }
+
+    @Operation(summary = "Проверка LAZY и EAGER:\n" +
+            "@ManyToOne(fetch = FetchType.LAZY)\n" +
+            "    @JoinColumn(name = \"ship_id\", nullable = false)\n" +
+            "    Ship ship;\n" +
+            "\n" +
+            "    @ManyToOne(fetch = FetchType.EAGER)\n" +
+            "    @JoinColumn(name = \"weapon_type_id\", nullable = false)\n" +
+            "    WeaponType weaponType;")
+    @GetMapping("/shipweapon")
+    public String findShipWeapon(Long id) {
+        String res = service.findShipWeapon(id);
+        System.out.println(res);
+        return res;
     }
 
 }
